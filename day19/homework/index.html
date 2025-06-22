@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guess gamee!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f3f3f3;
+      font-family: 'Arial', sans-serif;
+
+      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #start-btn {
+      padding: 15px 30px;
+      font-size: 20px;
+      background-color: rgb(63, 47, 207);
+      color: white;
+      border: none;
+      border-radius: 8px;    
+    }
+
+    .container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color:rgb(104, 104, 104);
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      width: 200px;
+      font-size: 18px;
+      margin-bottom: 15px;
+           
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+    }
+
+    #check-btn {
+      background-color: #055ca3;
+      color: white;
+    }
+
+    #restart-btn {
+      display: none;
+      background-color: #e92011a2;
+
+      margin-top: 20px;
+    }
+
+  
+
+    #attempts {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #4e4e4e;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="start-btn">start</button>
+
+  <div class="container" id="game-container">
+    <h1>guess random number</h1>
+    <input type="number" id="user-input" placeholder="შეიყვანე რიცხვი 1-100">
+    <button id="check-btn">check Number</button>
+    <p id="message"></p>
+    <p id="attempts">ცდების რაოდენობა: 0</p>
+    <button id="restart-btn">start again</button>
+  </div>
+
+  <script>
+    const startBtn = document.getElementById('start-btn');
+    const container = document.getElementById('game-container');
+    const checkBtn = document.getElementById('check-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const userInput = document.getElementById('user-input');
+    const message = document.getElementById('message');
+    const attemptsText = document.getElementById('attempts');
+
+    let randomNumber;
+    let attempts;
+
+    function startGame() {
+      startBtn.style.display = 'none';
+      container.style.display = 'flex';
+      resetGame();
+    }
+
+    function resetGame() {
+      randomNumber = Math.floor(Math.random() * 100) + 1;
+      attempts = 0;
+      message.textContent = '';
+      userInput.value = '';
+      restartBtn.style.display = 'none';
+      attemptsText.textContent = 'ცდა: 0';
+      
+    }
+
+    function checkNumber() {
+
+        const guess = Number(userInput.value);
+
+      if (!guess || guess < 1 || guess > 100) {
+        message.textContent = "გთხოვ შეიყვანე სწორი რიცხვი (1-100)";
+        return;
+      }
+
+      attempts++;
+      attemptsText.textContent = `ცდების რაოდენობა: ${attempts}`;
+
+      if (guess === randomNumber) {
+        message.textContent = ` გამოიცანი ${attempts} ცდაში `;
+        restartBtn.style.display = 'inline-block';
+        checkBtn.disabled = true;
+
+      } else if (attempts >= 7) {
+        message.textContent = ` წააგე სწორი იყო: ${randomNumber}`;
+        restartBtn.style.display = 'inline-block';
+        checkBtn.disabled = true;
+      } else {
+        message.textContent = guess < randomNumber
+          ? "არასწორია სცადე უფრო მაღალი რიცხვი"
+          : "არასწორიასცადე უფრო დაბალი რიცხვი";
+      }
+    }
+
+    startBtn.addEventListener('click', startGame);
+    checkBtn.addEventListener('click', checkNumber);
+    restartBtn.addEventListener('click', resetGame);
+  </script>
+
+</body>
+</html>
